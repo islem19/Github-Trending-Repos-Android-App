@@ -38,6 +38,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     private List<ItemModel> mData = new ArrayList<>();
     private RecyclerViewPresenter mRecyclerViewPresenter;
     private static Map<String, String> map = new HashMap<>();
+    protected static int mPageCount=1;
 
     public static RecyclerViewFragment newInstance() {
         return new RecyclerViewFragment();
@@ -89,14 +90,14 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
+        mRecyclerView.addOnScrollListener(mOnScrollListener);
     }
 
     private void initMap(){
         map.put("q","created:>2019-10-10");
         map.put("sort","stars");
         map.put("order","desc");
-        map.put("page","1");
+        map.put("page",String.valueOf(mPageCount));
     }
 
     private void requestDataModel(){
@@ -126,6 +127,23 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
         mRecyclerViewPresenter.clear();
         mAdapter.notifyDataSetChanged();
     }
+
+
+    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView,int newState)
+        {
+            int totalItemCount = mLayoutManager.getItemCount();
+            int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+
+            if (totalItemCount> 1 && lastVisibleItem >= totalItemCount - 1 )
+            {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    mPageCount++;
+                    requestDataModel();
+            }
+        }
+    };
 
     @Override
     public void onClick(View view) {
