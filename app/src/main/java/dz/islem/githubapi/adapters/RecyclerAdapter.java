@@ -3,22 +3,22 @@ package dz.islem.githubapi.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.ls.LSException;
-
-import java.util.List;
-
 import dz.islem.githubapi.R;
+import dz.islem.githubapi.interfaces.IRecyclerView;
+import dz.islem.githubapi.presenters.RecyclerViewPresenter;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    protected List mData;
+    private static RecyclerViewPresenter mRecyclerViewPresenter;
 
-    public RecyclerAdapter(List mData){
-        this.mData = mData;
+    public RecyclerAdapter(RecyclerViewPresenter mRecyclerViewPresenter){
+        this.mRecyclerViewPresenter = mRecyclerViewPresenter;
 
     }
 
@@ -33,19 +33,63 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+        mRecyclerViewPresenter.onBindViewHolderAtPosition(holder,position);
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mRecyclerViewPresenter.getDataSize();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements IRecyclerView {
+        private final TextView mTitle;
+        private final TextView mDescription;
+        private final TextView mStar;
+        private final TextView mLang;
+        private final ImageView mAvatatImg;
+        private final TextView mLicenseView;
 
         public ViewHolder(@NonNull View mView) {
             super(mView);
+
+            mTitle = mView.findViewById(R.id.title);
+            mDescription = mView.findViewById(R.id.description);
+            mAvatatImg = mView.findViewById(R.id.avatarImg);
+            mStar = mView.findViewById(R.id.starView);
+            mLang = mView.findViewById(R.id.langView);
+            mLicenseView = mView.findViewById(R.id.licenseView);
         }
+
+        @Override
+        public void setTitle(String title) {
+            mTitle.setText(title);
+        }
+
+        @Override
+        public void setDescription(String description) {
+            mDescription.setText(description);
+        }
+
+        @Override
+        public void setStarCount(String count) {
+            mStar.setText(count);
+        }
+
+        @Override
+        public void setLanguage(String language) {
+            mLang.setText(language);
+        }
+
+        @Override
+        public void setAvatar(String avatar) {
+
+        }
+
+        @Override
+        public void setLicense(String license) {
+            mLicenseView.setText(license);
+        }
+
     }
 
 }

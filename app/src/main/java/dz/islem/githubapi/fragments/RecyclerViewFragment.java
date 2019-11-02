@@ -14,18 +14,22 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dz.islem.githubapi.R;
 import dz.islem.githubapi.adapters.RecyclerAdapter;
+import dz.islem.githubapi.models.ItemModel;
+import dz.islem.githubapi.presenters.RecyclerViewPresenter;
 
 public class RecyclerViewFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
-    protected View mView;
-    protected RecyclerView mRecyclerView;
-    protected RecyclerAdapter mAdapter;
-    protected SwipeRefreshLayout mSwipeRefreshLayout;
-    protected RecyclerView.LayoutManager mLayoutManager;
-    protected List mData;
+    private View mView;
+    private RecyclerView mRecyclerView;
+    private RecyclerAdapter mAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private List<ItemModel> mData = new ArrayList<>();
+    private RecyclerViewPresenter mRecyclerViewPresenter;
 
     public static RecyclerViewFragment newInstance() {
         return new RecyclerViewFragment();
@@ -34,7 +38,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mRecyclerViewPresenter = new RecyclerViewPresenter(mData);
     }
 
     @Override
@@ -68,7 +72,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
 
     private void setupRecycler(){
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new RecyclerAdapter(mData);
+        mAdapter = new RecyclerAdapter(mRecyclerViewPresenter);
         mRecyclerView.setLayoutManager(mLayoutManager);
         int scrollPosition = 0;
         mRecyclerView.scrollToPosition(scrollPosition);
