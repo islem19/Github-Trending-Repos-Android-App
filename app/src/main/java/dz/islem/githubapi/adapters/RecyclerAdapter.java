@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import dz.islem.githubapi.R;
 import dz.islem.githubapi.interfaces.IRecyclerView;
 import dz.islem.githubapi.presenters.RecyclerViewPresenter;
@@ -82,7 +84,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         @Override
         public void setAvatar(String avatar) {
-
+            Picasso.get().load(avatar).into(mAvatatImg);
         }
 
         @Override
