@@ -1,9 +1,12 @@
 package dz.islem.githubapi.fragments;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -25,6 +28,7 @@ import dz.islem.githubapi.models.ItemModel;
 import dz.islem.githubapi.models.RepoModel;
 import dz.islem.githubapi.presenters.RecyclerViewPresenter;
 import dz.islem.githubapi.remote.RemoteManager;
+import dz.islem.githubapi.utils.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,7 +68,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     public void onStart () {
         super.onStart();
         initMap();
-        requestDataModel();
+        requestDataModel(Util.getSharedPrefs(getContext()));
     }
 
     private void initView(){
@@ -94,13 +98,16 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     }
 
     private void initMap(){
-        map.put("q","created:>2019-10-10");
+        map.put("q","created:>");
         map.put("sort","stars");
         map.put("order","desc");
         map.put("page",String.valueOf(mPageCount));
     }
 
-    private void requestDataModel(){
+    private void requestDataModel(String date){
+        map.put("q","created:>"+date);
+        Log.e("tag", "requestDataModel: "+date );
+
         RemoteManager.newInstance().getRepositories(map).enqueue(new Callback<RepoModel>() {
             @Override
             public void onResponse(Call<RepoModel> call, Response<RepoModel> response) {
@@ -139,21 +146,39 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
             {
                     mSwipeRefreshLayout.setRefreshing(true);
                     mPageCount++;
-                    requestDataModel();
+                    requestDataModel(Util.getSharedPrefs(getContext()));
             }
         }
     };
 
     @Override
     public void onClick(View view) {
-
+        new DatePickerDialog(getContext(), date,
+                Util.getYear(getContext()),
+                Util.getMonth(getContext()),
+                Util.getDay(getContext())).show();
     }
+
+    private DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+
+            Util.putSharedPrefes(getContext(),year,monthOfYear,dayOfMonth);
+            mSwipeRefreshLayout.setRefreshing(true);
+            mPageCount = 1;
+            clearData();
+            requestDataModel(Util.getSharedPrefs(getContext()));
+        }
+
+    };
 
     @Override
     public void onRefresh() {
         mPageCount = 1;
         clearData();
-        requestDataModel();
+        requestDataModel(Util.getSharedPrefs(getContext()));
     }
 }
 
