@@ -17,5 +17,7 @@ public interface IRecyclerViewPresenter {
     void clear();
 
     void addAll(List<ItemModel> mData);
+
+    void copyToClip(Context context, int position);
 }
 

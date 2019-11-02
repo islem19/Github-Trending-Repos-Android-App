@@ -1,5 +1,9 @@
 package dz.islem.githubapi.presenters;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+
 import java.util.List;
 
 import dz.islem.githubapi.adapters.RecyclerAdapter;
@@ -38,5 +42,12 @@ public class RecyclerViewPresenter implements IRecyclerViewPresenter {
     @Override
     public void addAll(List<ItemModel> mData) {
         this.mData.addAll(mData);
+    }
+
+    @Override
+    public void copyToClip(Context context, int position) {
+        ClipboardManager clipboard = (ClipboardManager)  context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Git URL", mData.get(position).getClone_url());
+        clipboard.setPrimaryClip(clip);
     }
 }

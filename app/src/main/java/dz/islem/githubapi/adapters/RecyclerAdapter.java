@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,8 +52,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         private final ImageView mAvatatImg;
         private final TextView mLicenseView;
 
-        public ViewHolder(@NonNull View mView) {
+        public ViewHolder(@NonNull final View mView) {
             super(mView);
+
+            mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(),"Link Copied to the Clipboard",Toast.LENGTH_SHORT).show();
+                    mRecyclerViewPresenter.copyToClip(view.getContext(),getAdapterPosition());
+                }
+            });
 
             mTitle = mView.findViewById(R.id.title);
             mDescription = mView.findViewById(R.id.description);
