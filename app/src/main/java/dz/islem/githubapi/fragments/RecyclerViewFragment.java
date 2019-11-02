@@ -118,6 +118,8 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
 
             @Override
             public void onFailure(Call<RepoModel> call, Throwable t) {
+                clearData();
+                getActivity().findViewById(R.id.sample_main_layout).findViewById(R.id.imgview).setVisibility(View.VISIBLE);
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -144,9 +146,14 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
 
             if (totalItemCount> 1 && lastVisibleItem >= totalItemCount - 1 )
             {
+                if (Util.isNetworkAvailable(getContext())){
                     mSwipeRefreshLayout.setRefreshing(true);
                     mPageCount++;
                     requestDataModel(Util.getSharedPrefs(getContext()));
+                }
+                else
+                    mSwipeRefreshLayout.setRefreshing(false);
+                Util.showSnack(mView,Util.isNetworkAvailable(getContext()));
             }
         }
     };
@@ -169,7 +176,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
             mSwipeRefreshLayout.setRefreshing(true);
             mPageCount = 1;
             clearData();
-            requestDataModel(Util.getSharedPrefs(getContext()));
+            loadData();
         }
 
     };
@@ -178,7 +185,19 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     public void onRefresh() {
         mPageCount = 1;
         clearData();
-        requestDataModel(Util.getSharedPrefs(getContext()));
+        loadData();
+    }
+
+    private void loadData(){
+        if (Util.isNetworkAvailable(getContext())){
+            getActivity().findViewById(R.id.sample_main_layout).findViewById(R.id.imgview).setVisibility(View.GONE);
+            requestDataModel(Util.getSharedPrefs(getContext()));
+        }
+        else{
+            getActivity().findViewById(R.id.sample_main_layout).findViewById(R.id.imgview).setVisibility(View.VISIBLE);
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+        Util.showSnack(mView,Util.isNetworkAvailable(getContext()));
     }
 }
 

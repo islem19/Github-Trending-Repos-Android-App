@@ -10,6 +10,13 @@
         android:layout_weight="2"
         android:layout_width="match_parent"
         android:layout_height="0px" >
+        <ImageView
+            android:id="@+id/imgview"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:background="@mipmap/nowifi"
+            android:visibility="gone"/>
     </FrameLayout>
 
 </LinearLayout>

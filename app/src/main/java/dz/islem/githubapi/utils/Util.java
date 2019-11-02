@@ -1,13 +1,21 @@
 package dz.islem.githubapi.utils;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import dz.islem.githubapi.R;
 
 public class Util {
 
@@ -56,5 +64,34 @@ public class Util {
             e.printStackTrace();
         }
         return Integer.parseInt(new SimpleDateFormat("dd").format(date));
+    }
+
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        // Test for connection
+        return mConnectivityManager.getActiveNetworkInfo() != null
+                && mConnectivityManager.getActiveNetworkInfo().isAvailable()
+                && mConnectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
+    // Showing the status in Snackbar
+    public static void showSnack(View view, boolean isConnected) {
+        String message;
+        int color;
+        if (isConnected) {
+            message = "Loading...";
+            color = Color.WHITE;
+        } else {
+            message = "Sorry! Not connected to internet";
+            color = Color.RED;
+        }
+
+        Snackbar snackbar = Snackbar
+                .make(view, message, Snackbar.LENGTH_LONG);
+
+        View sbView = snackbar.getView();
+        TextView textView = sbView.findViewById(R.id.snackbar_text);
+        textView.setTextColor(color);
+        snackbar.show();
     }
 }
