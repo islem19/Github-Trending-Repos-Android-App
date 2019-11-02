@@ -33,7 +33,6 @@ public class RecyclerViewPresenter implements IRecyclerViewPresenter {
     @Override
     public void clear() {
         mData.clear();
-
     }
 
     @Override

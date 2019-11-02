@@ -15,12 +15,19 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import dz.islem.githubapi.R;
 import dz.islem.githubapi.adapters.RecyclerAdapter;
 import dz.islem.githubapi.models.ItemModel;
+import dz.islem.githubapi.models.RepoModel;
 import dz.islem.githubapi.presenters.RecyclerViewPresenter;
+import dz.islem.githubapi.remote.RemoteManager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RecyclerViewFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private View mView;
@@ -30,6 +37,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     private RecyclerView.LayoutManager mLayoutManager;
     private List<ItemModel> mData = new ArrayList<>();
     private RecyclerViewPresenter mRecyclerViewPresenter;
+    private static Map<String, String> map = new HashMap<>();
 
     public static RecyclerViewFragment newInstance() {
         return new RecyclerViewFragment();
@@ -54,6 +62,8 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     @Override
     public void onStart () {
         super.onStart();
+        initMap();
+        requestDataModel();
     }
 
     private void initView(){
@@ -80,6 +90,41 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
+    }
+
+    private void initMap(){
+        map.put("q","created:>2019-10-10");
+        map.put("sort","stars");
+        map.put("order","desc");
+        map.put("page","1");
+    }
+
+    private void requestDataModel(){
+
+        RemoteManager.newInstance().getRepositories(map).enqueue(new Callback<RepoModel>() {
+            @Override
+            public void onResponse(Call<RepoModel> call, Response<RepoModel> response) {
+                mData = response.body().getItems();
+                addData();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Call<RepoModel> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void addData(){
+        mRecyclerViewPresenter.addAll(mData);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void clearData(){
+        mRecyclerViewPresenter.clear();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
