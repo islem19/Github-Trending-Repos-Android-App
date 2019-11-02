@@ -101,7 +101,6 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     }
 
     private void requestDataModel(){
-
         RemoteManager.newInstance().getRepositories(map).enqueue(new Callback<RepoModel>() {
             @Override
             public void onResponse(Call<RepoModel> call, Response<RepoModel> response) {
@@ -112,7 +111,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
 
             @Override
             public void onFailure(Call<RepoModel> call, Throwable t) {
-
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -152,7 +151,9 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onRefresh() {
-
+        mPageCount = 1;
+        clearData();
+        requestDataModel();
     }
 }
 
