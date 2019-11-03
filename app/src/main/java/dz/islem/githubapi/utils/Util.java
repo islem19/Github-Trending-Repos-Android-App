@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 

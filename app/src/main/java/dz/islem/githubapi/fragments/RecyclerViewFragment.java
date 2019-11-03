@@ -119,7 +119,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
             @Override
             public void onFailure(Call<RepoModel> call, Throwable t) {
                 clearData();
-                getActivity().findViewById(R.id.sample_main_layout).findViewById(R.id.imgview).setVisibility(View.VISIBLE);
+                //getActivity().findViewById(R.id.sample_main_layout).findViewById(R.id.imgview).setVisibility(View.VISIBLE);
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });

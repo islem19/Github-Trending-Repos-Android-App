@@ -21,5 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:contentDescription="@string/add"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:src="@mipmap/calendar"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

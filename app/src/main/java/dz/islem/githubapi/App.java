@@ -25,6 +25,5 @@ public class App extends AppCompatActivity {
             ImageView img = findViewById(R.id.imgview);
             img.setVisibility(View.VISIBLE);
         }
-
     }
 }

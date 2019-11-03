@@ -14,7 +14,7 @@ public class RemoteManager {
     private RemoteManager(){}
 
     public static RemoteManager newInstance(){
-        return (INSTANCE == null ? new RemoteManager() : INSTANCE);
+        return (INSTANCE == null ? INSTANCE= new RemoteManager() : INSTANCE);
     }
 
     public Call<RepoModel> getRepositories(Map<String, String> map){
