@@ -106,7 +106,6 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
 
     private void requestDataModel(String date){
         map.put("q","created:>"+date);
-        Log.e("tag", "requestDataModel: "+date );
 
         RemoteManager.newInstance().getRepositories(map).enqueue(new Callback<RepoModel>() {
             @Override
@@ -162,17 +161,17 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     public void onClick(View view) {
         new DatePickerDialog(getContext(), date,
                 Util.getYear(getContext()),
-                Util.getMonth(getContext()),
+                Util.getMonth(getContext())-1,
                 Util.getDay(getContext())).show();
     }
 
-    private DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+    public DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
 
-            Util.putSharedPrefes(getContext(),year,monthOfYear,dayOfMonth);
+            Util.putSharedPrefes(getContext(),year,monthOfYear+1,dayOfMonth);
             mSwipeRefreshLayout.setRefreshing(true);
             mPageCount = 1;
             clearData();

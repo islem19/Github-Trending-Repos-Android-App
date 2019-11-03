@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,7 +23,7 @@ public class Util {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.DAY_OF_MONTH, day);
-        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.MONTH, month-1);
         String mDate = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString("date",mDate).apply();
     }
