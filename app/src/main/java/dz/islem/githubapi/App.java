@@ -20,7 +20,7 @@ public class App extends AppCompatActivity {
                     .replace(R.id.sample_content_fragment, RecyclerViewFragment.newInstance())
                     .commit();
         else {
-            Util.showSnack(findViewById(R.id.sample_main_layout),false,null);
+            Util.showSnack(findViewById(R.id.sample_main_layout),true,"No Internet Connection! ");
             findViewById(R.id.imgview).setVisibility(View.VISIBLE);
         }
     }

@@ -74,15 +74,10 @@ public class Util {
     }
 
     // Showing the status in Snackbar
-    public static void showSnack(View view, boolean isConnected, String message) {
+    public static void showSnack(View view, boolean isError, String message) {
         int color = Color.WHITE;
-        if(message == null)
-            if (isConnected)
-                message = "Loading...";
-            else {
-                message = "Sorry! Not connected to internet :(";
-                color = Color.RED;
-            }
+        if (isError)
+            color = Color.RED;
 
         Snackbar snackbar = Snackbar
                 .make(view, message, Snackbar.LENGTH_LONG);

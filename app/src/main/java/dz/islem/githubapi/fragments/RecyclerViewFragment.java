@@ -24,26 +24,20 @@ import java.util.Map;
 
 import dz.islem.githubapi.R;
 import dz.islem.githubapi.adapters.RecyclerAdapter;
-import dz.islem.githubapi.models.ItemModel;
-import dz.islem.githubapi.models.RepoModel;
+import dz.islem.githubapi.interfaces.IRecyclerViewFragment;
 import dz.islem.githubapi.presenters.RecyclerViewPresenter;
-import dz.islem.githubapi.remote.RemoteManager;
+import dz.islem.githubapi.utils.Constants;
 import dz.islem.githubapi.utils.Util;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class RecyclerViewFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class RecyclerViewFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener , IRecyclerViewFragment {
     private View mView;
     private RecyclerView mRecyclerView;
     private RecyclerAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView.LayoutManager mLayoutManager;
-    private List<ItemModel> mData = new ArrayList<>();
     private RecyclerViewPresenter mRecyclerViewPresenter;
-    private static Map<String, String> map = new HashMap<>();
-    private static int mPageCount=1;
+
 
     public static RecyclerViewFragment newInstance() {
         return new RecyclerViewFragment();
@@ -52,7 +46,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRecyclerViewPresenter = new RecyclerViewPresenter(mData);
+        mRecyclerViewPresenter = new RecyclerViewPresenter(this);
     }
 
     @Override
@@ -68,9 +62,10 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     @Override
     public void onStart () {
         super.onStart();
-        initMap();
-        mSwipeRefreshLayout.setRefreshing(true);
-        requestDataModel(Util.getSharedPrefs(getContext()));
+
+        updateRefreshLayout(true);
+        display("Loading...");
+        mRecyclerViewPresenter.searchGithubRepos(Util.getSharedPrefs(getContext()));
     }
 
     private void initView(){
@@ -97,52 +92,9 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
         mRecyclerView.addOnScrollListener(mOnScrollListener);
     }
 
-    private void initMap(){
-        map.put("q","created:>");
-        map.put("sort","stars");
-        map.put("order","desc");
-        map.put("page",String.valueOf(mPageCount));
-    }
-
-    private void requestDataModel(String date){
-        map.put("q","created:>"+date);
-
-        RemoteManager.newInstance().getRepositories(map).enqueue(new Callback<RepoModel>() {
-            @Override
-            public void onResponse(Call<RepoModel> call, Response<RepoModel> response) {
-                mData = response.body().getItems();
-                if (!mData.isEmpty())
-                    addData();
-                else
-                    Util.showSnack(mView,true,"Sorry! No More Repos :(");
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(Call<RepoModel> call, Throwable t) {
-                Log.e("tag", "onFailure: "+t.toString() );
-                Util.showSnack(mView,true,"Sorry! can't load Repos, try again :(");
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
-    }
-
-    private void addData(){
-        mRecyclerViewPresenter.addAll(mData);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    private void clearData(){
-        mRecyclerViewPresenter.clear();
-        mAdapter.notifyDataSetChanged();
-    }
-
-
     private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
-        public void onScrollStateChanged(RecyclerView recyclerView,int newState)
-        {
+        public void onScrollStateChanged(RecyclerView recyclerView,int newState) {
             int totalItemCount = mLayoutManager.getItemCount();
             int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
 
@@ -150,12 +102,14 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
             {
                 if (Util.isNetworkAvailable(getContext())){
                     mSwipeRefreshLayout.setRefreshing(true);
-                    mPageCount++;
-                    requestDataModel(Util.getSharedPrefs(getContext()));
+                    Constants.PAGE_COUNT++;
+                    display("Loading...");
+                    mRecyclerViewPresenter.searchGithubRepos(Util.getSharedPrefs(getContext()));
                 }
-                else
+                else {
                     mSwipeRefreshLayout.setRefreshing(false);
-                Util.showSnack(mView,Util.isNetworkAvailable(getContext()),null);
+                    displayError("No Internet Connection :(");
+                }
             }
         }
     };
@@ -169,37 +123,68 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     }
 
     public DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
 
             Util.putSharedPrefes(getContext(),year,monthOfYear+1,dayOfMonth);
-            mSwipeRefreshLayout.setRefreshing(true);
-            mPageCount = 1;
-            clearData();
-            loadData();
+
+            mRecyclerViewPresenter.clear();
+            Constants.PAGE_COUNT = 1;
+
+            if(Util.isNetworkAvailable(getContext())){
+                updateRefreshLayout(true);
+                showError(View.GONE);
+                display("Loading...");
+                mRecyclerViewPresenter.searchGithubRepos(Util.getSharedPrefs(getContext()));
+            }
+            else {
+                showError(View.VISIBLE);
+                displayError("No Internet Connection :(");
+            }
         }
 
     };
 
     @Override
     public void onRefresh() {
-        mPageCount = 1;
-        clearData();
-        loadData();
+        Constants.PAGE_COUNT = 1;
+        mRecyclerViewPresenter.clear();
+
+        if(Util.isNetworkAvailable(getContext())){
+            updateRefreshLayout(true);
+            showError(View.GONE);
+            display("Loading...");
+            mRecyclerViewPresenter.searchGithubRepos(Util.getSharedPrefs(getContext()));
+        }else {
+            updateRefreshLayout(false);
+            showError(View.VISIBLE);
+            displayError("No Internet Connection :(");
+        }
     }
 
-    private void loadData(){
-        if (Util.isNetworkAvailable(getContext())){
-            getActivity().findViewById(R.id.sample_main_layout).findViewById(R.id.imgview).setVisibility(View.GONE);
-            requestDataModel(Util.getSharedPrefs(getContext()));
-        }
-        else{
-            getActivity().findViewById(R.id.sample_main_layout).findViewById(R.id.imgview).setVisibility(View.VISIBLE);
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-        Util.showSnack(mView,Util.isNetworkAvailable(getContext()),null);
+    @Override
+    public void notifySearchResults() {
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void display(String message) {
+        Util.showSnack(mView,false,message);
+    }
+
+    @Override
+    public void displayError(String error) {
+        Util.showSnack(mView,true,error);
+    }
+
+    @Override
+    public void updateRefreshLayout(boolean refresh) {
+        mSwipeRefreshLayout.setRefreshing(refresh);
+    }
+
+    private void showError(int Visibility){
+        getActivity().findViewById(R.id.sample_main_layout).findViewById(R.id.imgview).setVisibility(Visibility);
     }
 }
 
