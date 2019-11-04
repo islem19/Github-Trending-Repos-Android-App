@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 
 import dz.islem.githubapi.fragments.RecyclerViewFragment;
 import dz.islem.githubapi.utils.Util;
@@ -21,9 +20,8 @@ public class App extends AppCompatActivity {
                     .replace(R.id.sample_content_fragment, RecyclerViewFragment.newInstance())
                     .commit();
         else {
-            Util.showSnack(findViewById(R.id.sample_main_layout),false);
-            ImageView img = findViewById(R.id.imgview);
-            img.setVisibility(View.VISIBLE);
+            Util.showSnack(findViewById(R.id.sample_main_layout),false,null);
+            findViewById(R.id.imgview).setVisibility(View.VISIBLE);
         }
     }
 }

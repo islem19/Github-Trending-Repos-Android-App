@@ -29,6 +29,7 @@ import dz.islem.githubapi.models.RepoModel;
 import dz.islem.githubapi.presenters.RecyclerViewPresenter;
 import dz.islem.githubapi.remote.RemoteManager;
 import dz.islem.githubapi.utils.Util;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,7 +43,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     private List<ItemModel> mData = new ArrayList<>();
     private RecyclerViewPresenter mRecyclerViewPresenter;
     private static Map<String, String> map = new HashMap<>();
-    protected static int mPageCount=1;
+    private static int mPageCount=1;
 
     public static RecyclerViewFragment newInstance() {
         return new RecyclerViewFragment();
@@ -68,6 +69,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     public void onStart () {
         super.onStart();
         initMap();
+        mSwipeRefreshLayout.setRefreshing(true);
         requestDataModel(Util.getSharedPrefs(getContext()));
     }
 
@@ -75,14 +77,12 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
         FloatingActionButton mFloatingActionButton = mView.findViewById(R.id.actionButton);
         mRecyclerView = mView.findViewById(R.id.recyclerView);
         mSwipeRefreshLayout = mView.findViewById(R.id.swipeRefreshLayout);
-        mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
         mFloatingActionButton.setOnClickListener(this);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-
     }
 
     private void setupRecycler(){
@@ -111,14 +111,17 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
             @Override
             public void onResponse(Call<RepoModel> call, Response<RepoModel> response) {
                 mData = response.body().getItems();
-                addData();
+                if (!mData.isEmpty())
+                    addData();
+                else
+                    Util.showSnack(mView,true,"Sorry! No More Repos :(");
                 mSwipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<RepoModel> call, Throwable t) {
-                clearData();
-                //getActivity().findViewById(R.id.sample_main_layout).findViewById(R.id.imgview).setVisibility(View.VISIBLE);
+                Log.e("tag", "onFailure: "+t.toString() );
+                Util.showSnack(mView,true,"Sorry! can't load Repos, try again :(");
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -152,7 +155,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
                 }
                 else
                     mSwipeRefreshLayout.setRefreshing(false);
-                Util.showSnack(mView,Util.isNetworkAvailable(getContext()));
+                Util.showSnack(mView,Util.isNetworkAvailable(getContext()),null);
             }
         }
     };
@@ -196,7 +199,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
             getActivity().findViewById(R.id.sample_main_layout).findViewById(R.id.imgview).setVisibility(View.VISIBLE);
             mSwipeRefreshLayout.setRefreshing(false);
         }
-        Util.showSnack(mView,Util.isNetworkAvailable(getContext()));
+        Util.showSnack(mView,Util.isNetworkAvailable(getContext()),null);
     }
 }
 

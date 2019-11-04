@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -75,16 +74,15 @@ public class Util {
     }
 
     // Showing the status in Snackbar
-    public static void showSnack(View view, boolean isConnected) {
-        String message;
-        int color;
-        if (isConnected) {
-            message = "Loading...";
-            color = Color.WHITE;
-        } else {
-            message = "Sorry! Not connected to internet";
-            color = Color.RED;
-        }
+    public static void showSnack(View view, boolean isConnected, String message) {
+        int color = Color.WHITE;
+        if(message == null)
+            if (isConnected)
+                message = "Loading...";
+            else {
+                message = "Sorry! Not connected to internet :(";
+                color = Color.RED;
+            }
 
         Snackbar snackbar = Snackbar
                 .make(view, message, Snackbar.LENGTH_LONG);
