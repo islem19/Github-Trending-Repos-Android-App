@@ -1,35 +1,38 @@
-# Android Example Application
+# Github Trending Repos Android App
 
-This is an example Android Application README to show briefly the sections your app README should contain.
+This is a simple Android App that uses the Github API to retreive and search for the most starred reops created since a spesific date. The date can be changed manually by the user. 
 
-## Installation
+## Screenshots
+
+[<img src="screenshots/screenshot1.png" align="left"
+width="250"
+    hspace="10" vspace="10">](screenshots/screenshot1.png)
+[<img src="screenshots/screenshot2.png" align="center"
+width="250"
+    hspace="10" vspace="10">](screenshots/screenshot2.png)
+[<img src="screenshots/screenshot3.png" align="center"
+width="250"
+    hspace="10" vspace="10">](screenshots/screenshot3.png)
+
+## Setup
 Clone this repository and import into **Android Studio**
 ```bash
-git clone git@github.com:islem19/<reponame>.git
+git clone https://github.com/islem19/Github-Trending-Repos-Android-App.git
 ```
 
-## Configuration
-### Keystores:
-Create `app/keystore.gradle` with the following info:
-```gradle
-ext.key_alias='...'
-ext.key_password='...'
-ext.store_password='...'
-```
-And place both keystores under `app/keystores/` directory:
-- `playstore.keystore`
-- `stage.keystore`
+## Permissions
+The App requires the following permissions:
+- Internet access.
+- Access to WiFi state.
+- Access to Network state.
+
+## Libraries and Dependencies
+- [Retrofit](https://square.github.io/retrofit/)
+- [Picasso](https://square.github.io/picasso/)
+- [RecyclerView](https://developer.android.com/jetpack/androidx/releases/recyclerview)
+- Material Design -[Floating Action Button](https://material.io/develop/android/components/floating-action-button/)-
 
 
-## Build variants
-Use the Android Studio *Build Variants* button to choose between **production** and **staging** flavors combined with debug and release build types
-
-
-## Generating signed APK
-From Android Studio:
-1. ***Build*** menu
-2. ***Generate Signed APK...***
-3. Fill in the keystore information *(you only need to do this once manually and then let Android Studio remember it)*
 
 ## Maintainers
 This project is mantained by:
@@ -46,3 +49,4 @@ This project is mantained by:
 
 
 ## License
+This application is released under GNU GPLv3 (see [LICENSE](https://github.com/islem19/Github-Trending-Repos-Android-App/blob/develop/LICENSE)). Some of the used libraries are released under different licenses.
