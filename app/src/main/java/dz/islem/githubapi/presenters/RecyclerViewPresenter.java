@@ -71,7 +71,11 @@ public class RecyclerViewPresenter implements IRecyclerViewPresenter {
     @Override
     public void searchGithubRepos(String date) {
         initMap();
-        map.put("q","created:>"+date);
+        if(date != null && !date.isEmpty())
+            map.put("q","created:>"+date);
+
+        mIRecyclerViewFragment.updateRefreshLayout(true);
+        mIRecyclerViewFragment.display("Loading...");
 
         RemoteManager.newInstance().getRepositories(map).enqueue(new Callback<RepoModel>() {
             @Override

@@ -62,9 +62,6 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     @Override
     public void onStart () {
         super.onStart();
-
-        updateRefreshLayout(true);
-        display("Loading...");
         mRecyclerViewPresenter.searchGithubRepos(Util.getSharedPrefs(getContext()));
     }
 
@@ -101,15 +98,11 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
             if (totalItemCount> 1 && lastVisibleItem >= totalItemCount - 1 )
             {
                 if (Util.isNetworkAvailable(getContext())){
-                    mSwipeRefreshLayout.setRefreshing(true);
                     Constants.PAGE_COUNT++;
-                    display("Loading...");
                     mRecyclerViewPresenter.searchGithubRepos(Util.getSharedPrefs(getContext()));
                 }
-                else {
-                    mSwipeRefreshLayout.setRefreshing(false);
+                else
                     displayError("No Internet Connection :(");
-                }
             }
         }
     };
@@ -133,9 +126,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
             Constants.PAGE_COUNT = 1;
 
             if(Util.isNetworkAvailable(getContext())){
-                updateRefreshLayout(true);
                 showError(View.GONE);
-                display("Loading...");
                 mRecyclerViewPresenter.searchGithubRepos(Util.getSharedPrefs(getContext()));
             }
             else {
@@ -152,9 +143,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
         mRecyclerViewPresenter.clear();
 
         if(Util.isNetworkAvailable(getContext())){
-            updateRefreshLayout(true);
             showError(View.GONE);
-            display("Loading...");
             mRecyclerViewPresenter.searchGithubRepos(Util.getSharedPrefs(getContext()));
         }else {
             updateRefreshLayout(false);
