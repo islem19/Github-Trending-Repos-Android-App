@@ -6,13 +6,13 @@ This is a simple Android App that uses the Github API to retreive and search for
 
 [<img src="screenshots/screenshot1.png" align="left"
 width="250"
-    hspace="50" vspace="50">](screenshots/screenshot1.png)
+    hspace="10" vspace="10">](screenshots/screenshot1.png)
 [<img src="screenshots/screenshot2.png" align="center"
 width="250"
-    hspace="50" vspace="50">](screenshots/screenshot2.png)
+    hspace="10" vspace="10">](screenshots/screenshot2.png)
 [<img src="screenshots/screenshot3.png" align="center"
 width="250"
-    hspace="50" vspace="50">](screenshots/screenshot3.png)
+    hspace="10" vspace="10">](screenshots/screenshot3.png)
 
 ## Setup
 Clone this repository and import into **Android Studio**
