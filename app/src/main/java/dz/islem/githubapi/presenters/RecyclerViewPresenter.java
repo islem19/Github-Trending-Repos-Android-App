@@ -3,6 +3,7 @@ package dz.islem.githubapi.presenters;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +60,8 @@ public class RecyclerViewPresenter implements IRecyclerViewPresenter {
         ClipboardManager clipboard = (ClipboardManager)  context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("Git URL", mData.get(position).getClone_url());
         clipboard.setPrimaryClip(clip);
+
+        Toast.makeText(context,"Link Copied to the Clipboard",Toast.LENGTH_SHORT).show();
     }
 
     private void initMap(){
