@@ -17,6 +17,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    testOptions{
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -28,6 +34,12 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:4.3'
+    testImplementation "org.mockito:mockito-core:2.1.0"
+    testImplementation "org.powermock:powermock-module-junit4:1.7.0RC2"
+    testImplementation "org.powermock:powermock-module-junit4-rule:1.7.0RC2"
+    testImplementation "org.powermock:powermock-api-mockito2:1.7.0RC2"
+    testImplementation "org.powermock:powermock-classloading-xstream:1.7.0RC2"
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
