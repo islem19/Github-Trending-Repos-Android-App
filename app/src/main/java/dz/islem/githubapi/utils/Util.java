@@ -1,9 +1,9 @@
 package dz.islem.githubapi.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,17 +19,19 @@ import dz.islem.githubapi.R;
 public class Util {
 
     public static void putSharedPrefes(Context context, int year, int month, int day){
+        SharedPreferences mSharedPreferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.DAY_OF_MONTH, day);
         cal.set(Calendar.MONTH, month-1);
         String mDate = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("date",mDate).apply();
+        mSharedPreferences.edit().putString("DATE",mDate).apply();
     }
 
     public static String getSharedPrefs(Context context){
+        SharedPreferences mSharedPreferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
         String mDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()-24*60*60*1000));
-        return PreferenceManager.getDefaultSharedPreferences(context).getString("date",mDate);
+        return mSharedPreferences.getString("DATE",mDate);
     }
 
     public static int getYear(Context context) {
