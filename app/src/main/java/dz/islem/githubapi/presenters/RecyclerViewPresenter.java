@@ -36,12 +36,13 @@ public class RecyclerViewPresenter implements IRecyclerViewPresenter {
         ItemModel data = mData.get(position);
         String mCount = (data.getStar_count() >= 1000 ? data.getStar_count()/1000+"k" : String.valueOf(data.getStar_count()));
 
-        view.setTitle(data.getName());
-        view.setDescription(data.getDescription());
-        view.setAvatar(data.getOwners().getAvatar_url());
-        view.setLanguage(data.getLanguage());
-        view.setLicense(data.getLicenses().getName());
+        if(data.getName()!= null) view.setTitle(data.getName());
+        if(data.getDescription()!= null) view.setDescription(data.getDescription());
+        if (data.getOwners() != null) view.setAvatar(data.getOwners().getAvatar_url());
+        if (data.getLanguage() != null) view.setLanguage(data.getLanguage());
+        if (data.getLicenses() != null) view.setLicense(data.getLicenses().getName());
         view.setStarCount(mCount);
+
     }
 
     @Override

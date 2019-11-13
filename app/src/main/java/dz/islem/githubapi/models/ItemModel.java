@@ -76,7 +76,7 @@ public class ItemModel implements Serializable {
     }
 
     public String getDescription() {
-        return (description == null ? " ": description);
+        return description;
     }
 
     public void setDescription(String description) {
@@ -84,7 +84,7 @@ public class ItemModel implements Serializable {
     }
 
     public String getLanguage() {
-        return (language == null ? " ":language);
+        return language;
     }
 
     public void setLanguage(String language) {
@@ -92,7 +92,7 @@ public class ItemModel implements Serializable {
     }
 
     public LicenseModel getLicenses() {
-        return (licenses == null ? new LicenseModel(" "):licenses);
+        return licenses;
 
     }
 
