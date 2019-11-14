@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import dz.islem.githubapi.adapters.RecyclerAdapter;
 import dz.islem.githubapi.interfaces.IRecyclerViewFragment;
 import dz.islem.githubapi.interfaces.IRecyclerViewPresenter;
 import dz.islem.githubapi.models.ItemModel;
@@ -23,26 +22,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RecyclerViewPresenter implements IRecyclerViewPresenter {
+
     private List<ItemModel> mData = new ArrayList<>();
     private static Map<String, String> map = new HashMap<>();
     private IRecyclerViewFragment mIRecyclerViewFragment;
 
     public RecyclerViewPresenter(IRecyclerViewFragment mIRecyclerViewFragment){
         this.mIRecyclerViewFragment = mIRecyclerViewFragment;
-
-    }
-    @Override
-    public void onBindViewHolderAtPosition(RecyclerAdapter.ViewHolder view, int position) {
-        ItemModel data = mData.get(position);
-        String mCount = (data.getStar_count() >= 1000 ? data.getStar_count()/1000+"k" : String.valueOf(data.getStar_count()));
-
-        if(data.getName()!= null) view.setTitle(data.getName());
-        if(data.getDescription()!= null) view.setDescription(data.getDescription());
-        if (data.getOwners() != null) view.setAvatar(data.getOwners().getAvatar_url());
-        if (data.getLanguage() != null) view.setLanguage(data.getLanguage());
-        if (data.getLicenses() != null) view.setLicense(data.getLicenses().getName());
-        view.setStarCount(mCount);
-
     }
 
     @Override
@@ -53,16 +39,7 @@ public class RecyclerViewPresenter implements IRecyclerViewPresenter {
     @Override
     public void clear() {
         mData.clear();
-        mIRecyclerViewFragment.notifySearchResults();
-    }
-
-    @Override
-    public void copyToClip(Context context, int position) {
-        ClipboardManager clipboard = (ClipboardManager)  context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Git URL", mData.get(position).getClone_url());
-        clipboard.setPrimaryClip(clip);
-
-        Toast.makeText(context,"Link Copied to the Clipboard",Toast.LENGTH_SHORT).show();
+        mIRecyclerViewFragment.notifySearchResults(mData);
     }
 
     private void initMap(){
@@ -87,7 +64,7 @@ public class RecyclerViewPresenter implements IRecyclerViewPresenter {
                 List<ItemModel> res = response.body().getItems();
                 if (res != null && !res.isEmpty()){
                     mData.addAll(res);
-                    mIRecyclerViewFragment.notifySearchResults();
+                    mIRecyclerViewFragment.notifySearchResults(mData);
                 }
                 else
                     mIRecyclerViewFragment.displayError("No Github Repos to Load :/");

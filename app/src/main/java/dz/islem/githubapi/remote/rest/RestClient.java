@@ -6,7 +6,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestClient {
 
-
     private static Retrofit getRetroInstance(){
         return new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)

@@ -2,7 +2,6 @@ package dz.islem.githubapi.fragments;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +16,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import dz.islem.githubapi.R;
 import dz.islem.githubapi.adapters.RecyclerAdapter;
 import dz.islem.githubapi.interfaces.IRecyclerViewFragment;
+import dz.islem.githubapi.models.ItemModel;
 import dz.islem.githubapi.presenters.RecyclerViewPresenter;
 import dz.islem.githubapi.utils.Constants;
 import dz.islem.githubapi.utils.Util;
-
 
 public class RecyclerViewFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener , IRecyclerViewFragment {
     private View mView;
@@ -79,7 +75,7 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
 
     private void setupRecycler(){
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new RecyclerAdapter(mRecyclerViewPresenter);
+        mAdapter = new RecyclerAdapter();
         mRecyclerView.setLayoutManager(mLayoutManager);
         int scrollPosition = 0;
         mRecyclerView.scrollToPosition(scrollPosition);
@@ -153,7 +149,8 @@ public class RecyclerViewFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public void notifySearchResults() {
+    public void notifySearchResults(List<ItemModel> mData) {
+        mAdapter.setData(mData);
         mAdapter.notifyDataSetChanged();
     }
 

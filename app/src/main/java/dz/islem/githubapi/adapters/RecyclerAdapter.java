@@ -1,28 +1,32 @@
 package dz.islem.githubapi.adapters;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dz.islem.githubapi.R;
 import dz.islem.githubapi.interfaces.IRecyclerView;
-import dz.islem.githubapi.presenters.RecyclerViewPresenter;
+import dz.islem.githubapi.models.ItemModel;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private static RecyclerViewPresenter mRecyclerViewPresenter;
+    private static List<ItemModel> mData = new ArrayList<>();
 
-    public RecyclerAdapter(RecyclerViewPresenter mRecyclerViewPresenter){
-        this.mRecyclerViewPresenter = mRecyclerViewPresenter;
-
-    }
+    public RecyclerAdapter(){}
 
     @NonNull
     @Override
@@ -34,13 +38,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        mRecyclerViewPresenter.onBindViewHolderAtPosition(holder,position);
+    public void onBindViewHolder(@NonNull ViewHolder mViewHolder, int position) {
+        ItemModel data = mData.get(position);
+        String mCount = (data.getStar_count() >= 1000 ? data.getStar_count()/1000+"k" : String.valueOf(data.getStar_count()));
+
+        if(data.getName()!= null) mViewHolder.setTitle(data.getName());
+        if(data.getDescription()!= null) mViewHolder.setDescription(data.getDescription());
+        if (data.getOwners() != null) mViewHolder.setAvatar(data.getOwners().getAvatar_url());
+        if (data.getLanguage() != null) mViewHolder.setLanguage(data.getLanguage());
+        if (data.getLicenses() != null) mViewHolder.setLicense(data.getLicenses().getName());
+        mViewHolder.setStarCount(mCount);
     }
 
     @Override
     public int getItemCount() {
-        return mRecyclerViewPresenter.getDataSize();
+        return (mData == null ? 0 : mData.size());
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements IRecyclerView {
@@ -57,7 +69,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mRecyclerViewPresenter.copyToClip(view.getContext(),getAdapterPosition());
+                    RecyclerAdapter.copyToClip(view.getContext(),getAdapterPosition());
                 }
             });
 
@@ -99,6 +111,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             mLicenseView.setText(license);
         }
 
+    }
+
+    public static void copyToClip(Context context, int position) {
+        ClipboardManager clipboard = (ClipboardManager)  context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Git URL", mData.get(position).getClone_url());
+        clipboard.setPrimaryClip(clip);
+
+        Toast.makeText(context,"Link Copied to the Clipboard",Toast.LENGTH_SHORT).show();
+    }
+
+    public void setData(List<ItemModel> mData) {
+        this.mData = mData;
     }
 
 }
