@@ -17,6 +17,10 @@ import dz.islem.githubapi.models.RepoModel;
 import dz.islem.githubapi.remote.RemoteManager;
 import dz.islem.githubapi.utils.Constants;
 
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,25 +62,26 @@ public class RecyclerViewPresenter implements IRecyclerViewPresenter {
         mIRecyclerViewFragment.updateRefreshLayout(true);
         mIRecyclerViewFragment.display("Loading...");
 
-        RemoteManager.newInstance().getRepositories(map).enqueue(new Callback<RepoModel>() {
-            @Override
-            public void onResponse(Call<RepoModel> call, Response<RepoModel> response) {
-                List<ItemModel> res = response.body().getItems();
-                if (res != null && !res.isEmpty()){
-                    mData.addAll(res);
-                    mIRecyclerViewFragment.notifySearchResults(mData);
-                }
-                else
-                    mIRecyclerViewFragment.displayError("No Github Repos to Load :/");
-                mIRecyclerViewFragment.updateRefreshLayout(false);
-            }
-
-            @Override
-            public void onFailure(Call<RepoModel> call, Throwable t) {
-                mIRecyclerViewFragment.displayError("Error: can't reach github API ");
-                mIRecyclerViewFragment.updateRefreshLayout(false);
-            }
-        });
+        Observable<RepoModel> mObservable = RemoteManager.newInstance().getRepositories(map);
+        mObservable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(result -> result.getItems())
+                .subscribe(this::handleResults, this::handleError);
     }
 
+    private void handleResults(List<ItemModel> mList){
+        if (mList != null && !mList.isEmpty()){
+            mData.addAll(mList);
+            mIRecyclerViewFragment.notifySearchResults(mData);
+        }
+        else
+            mIRecyclerViewFragment.displayError("No Github Repos to Load :/");
+        mIRecyclerViewFragment.updateRefreshLayout(false);
+
+    }
+
+    private void handleError(Throwable t){
+        mIRecyclerViewFragment.displayError("Error: can't reach github API ");
+        mIRecyclerViewFragment.updateRefreshLayout(false);
+    }
 }

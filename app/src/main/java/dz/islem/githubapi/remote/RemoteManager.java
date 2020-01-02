@@ -5,6 +5,7 @@ import java.util.Map;
 import dz.islem.githubapi.models.RepoModel;
 import dz.islem.githubapi.remote.rest.RestApi;
 import dz.islem.githubapi.remote.rest.RestClient;
+import io.reactivex.Observable;
 import retrofit2.Call;
 
 public class RemoteManager {
@@ -16,7 +17,7 @@ public class RemoteManager {
         return (INSTANCE == null ? INSTANCE= new RemoteManager() : INSTANCE);
     }
 
-    public Call<RepoModel> getRepositories(Map<String, String> map){
+    public Observable<RepoModel> getRepositories(Map<String, String> map){
         RestApi api = RestClient.getApiService();
         return api.getRepos(map);
     }
