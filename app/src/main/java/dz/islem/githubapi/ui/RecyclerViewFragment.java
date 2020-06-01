@@ -1,4 +1,4 @@
-package dz.islem.githubapi.fragments;
+package dz.islem.githubapi.ui;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -19,10 +19,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import dz.islem.githubapi.R;
-import dz.islem.githubapi.adapters.RecyclerAdapter;
-import dz.islem.githubapi.interfaces.IRecyclerViewFragment;
-import dz.islem.githubapi.models.ItemModel;
-import dz.islem.githubapi.presenters.RecyclerViewPresenter;
+import dz.islem.githubapi.ui.interfaces.IRecyclerViewFragment;
+import dz.islem.githubapi.data.model.ItemModel;
 import dz.islem.githubapi.utils.Constants;
 import dz.islem.githubapi.utils.Util;
 

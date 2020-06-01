@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/trending"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".App">
+        <activity android:name=".ui.App">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

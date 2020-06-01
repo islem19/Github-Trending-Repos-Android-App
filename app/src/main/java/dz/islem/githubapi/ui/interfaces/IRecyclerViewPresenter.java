@@ -1,4 +1,4 @@
-package dz.islem.githubapi.interfaces;
+package dz.islem.githubapi.ui.interfaces;
 
 public interface IRecyclerViewPresenter {
 

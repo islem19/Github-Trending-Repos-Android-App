@@ -1,10 +1,9 @@
-package dz.islem.githubapi.remote.rest;
+package dz.islem.githubapi.data.remote.rest;
 
 import java.util.Map;
 
-import dz.islem.githubapi.models.RepoModel;
+import dz.islem.githubapi.data.model.RepoModel;
 import io.reactivex.Observable;
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 

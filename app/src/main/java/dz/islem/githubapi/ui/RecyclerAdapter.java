@@ -1,4 +1,4 @@
-package dz.islem.githubapi.adapters;
+package dz.islem.githubapi.ui;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dz.islem.githubapi.R;
-import dz.islem.githubapi.interfaces.IRecyclerView;
-import dz.islem.githubapi.models.ItemModel;
+import dz.islem.githubapi.ui.interfaces.IRecyclerView;
+import dz.islem.githubapi.data.model.ItemModel;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 

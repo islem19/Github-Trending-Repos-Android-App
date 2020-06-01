@@ -1,11 +1,11 @@
-package dz.islem.githubapi;
-
-import androidx.appcompat.app.AppCompatActivity;
+package dz.islem.githubapi.ui;
 
 import android.os.Bundle;
 import android.view.View;
 
-import dz.islem.githubapi.fragments.RecyclerViewFragment;
+import androidx.appcompat.app.AppCompatActivity;
+
+import dz.islem.githubapi.R;
 import dz.islem.githubapi.utils.Util;
 
 public class App extends AppCompatActivity {

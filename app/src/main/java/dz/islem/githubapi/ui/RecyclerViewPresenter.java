@@ -1,35 +1,26 @@
-package dz.islem.githubapi.presenters;
-
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.widget.Toast;
+package dz.islem.githubapi.ui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import dz.islem.githubapi.interfaces.IRecyclerViewFragment;
-import dz.islem.githubapi.interfaces.IRecyclerViewPresenter;
-import dz.islem.githubapi.models.ItemModel;
-import dz.islem.githubapi.models.RepoModel;
-import dz.islem.githubapi.remote.RemoteManager;
+import dz.islem.githubapi.ui.interfaces.IRecyclerViewFragment;
+import dz.islem.githubapi.ui.interfaces.IRecyclerViewPresenter;
+import dz.islem.githubapi.data.model.ItemModel;
+import dz.islem.githubapi.data.model.RepoModel;
+import dz.islem.githubapi.data.remote.RemoteManager;
 import dz.islem.githubapi.utils.Constants;
-
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RecyclerViewPresenter implements IRecyclerViewPresenter {
 
     private List<ItemModel> mData = new ArrayList<>();
     private static Map<String, String> map = new HashMap<>();
     private IRecyclerViewFragment mIRecyclerViewFragment;
+    private Observable<RepoModel> mObservable;
 
     public RecyclerViewPresenter(IRecyclerViewFragment mIRecyclerViewFragment){
         this.mIRecyclerViewFragment = mIRecyclerViewFragment;
@@ -62,7 +53,7 @@ public class RecyclerViewPresenter implements IRecyclerViewPresenter {
         mIRecyclerViewFragment.updateRefreshLayout(true);
         mIRecyclerViewFragment.display("Loading...");
 
-        Observable<RepoModel> mObservable = RemoteManager.newInstance().getRepositories(map);
+        mObservable = RemoteManager.newInstance().getRepositories(map);
         mObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(result -> result.getItems())

@@ -1,8 +1,8 @@
-package dz.islem.githubapi.interfaces;
+package dz.islem.githubapi.ui.interfaces;
 
 import java.util.List;
 
-import dz.islem.githubapi.models.ItemModel;
+import dz.islem.githubapi.data.model.ItemModel;
 
 public interface IRecyclerViewFragment {
 

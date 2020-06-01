@@ -1,12 +1,11 @@
-package dz.islem.githubapi.remote;
+package dz.islem.githubapi.data.remote;
 
 import java.util.Map;
 
-import dz.islem.githubapi.models.RepoModel;
-import dz.islem.githubapi.remote.rest.RestApi;
-import dz.islem.githubapi.remote.rest.RestClient;
+import dz.islem.githubapi.data.model.RepoModel;
+import dz.islem.githubapi.data.remote.rest.RestApi;
+import dz.islem.githubapi.data.remote.rest.RestClient;
 import io.reactivex.Observable;
-import retrofit2.Call;
 
 public class RemoteManager {
     private static RemoteManager INSTANCE;
