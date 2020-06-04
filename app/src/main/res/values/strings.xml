@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">App</string>
+    <string name="app_name">Github Trending Repos</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="grid_layout_manager">Grid Layout Manager</string>
+    <string name="linear_layout_manager">Linear Layout Manager</string>
+    <string name="stars">Stars</string>
+    <string name="lang">Language</string>
+    <string name="license">License</string>
+    <string name="add">Add</string>
+    <string name="todo">TODO</string>
 </resources>

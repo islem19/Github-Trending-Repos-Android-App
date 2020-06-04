@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:gravity="center_vertical">
+    <ImageView
+        android:id="@+id/avatarImg"
+        android:layout_width="100dp"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/mLinear"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/avatarImg">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="@string/title"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/StarImage"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/favourites" />
+
+        <TextView
+            android:id="@+id/starView"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/stars" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/mLinear"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/avatarImg"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/description" />
+    <LinearLayout
+        android:id="@+id/mSecLinear"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/description"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/avatarImg">
+        <TextView
+            android:id="@+id/langView"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:text="@string/lang" />
+        <TextView
+            android:id="@+id/licenseView"
+            android:layout_width="fill_parent"
+            android:gravity="end"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingEnd="5dp"
+            android:text="@string/license" />
+    </LinearLayout>
+</RelativeLayout>

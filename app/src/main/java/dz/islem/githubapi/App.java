@@ -1,14 +1,17 @@
 package dz.islem.githubapi;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.app.Application;
 
-import android.os.Bundle;
-
-public class App extends AppCompatActivity {
+public class App extends Application {
+    private static App mInstance;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public void onCreate(){
+        super.onCreate();
+        mInstance = this;
+    }
+
+    public static App getInstance() {
+        return mInstance;
     }
 }
