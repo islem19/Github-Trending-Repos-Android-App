@@ -1,7 +1,6 @@
 package dz.islem.githubapi.utils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
@@ -19,24 +18,7 @@ import dz.islem.githubapi.R;
 
 public class Util {
 
-    public static void putSharedPrefes(Context context, int year, int month, int day){
-        SharedPreferences mSharedPreferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.DAY_OF_MONTH, day);
-        cal.set(Calendar.MONTH, month-1);
-        String mDate = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
-        mSharedPreferences.edit().putString("DATE",mDate).apply();
-    }
-
-    public static String getSharedPrefs(Context context){
-        SharedPreferences mSharedPreferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
-        String mDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()-24*60*60*1000));
-        return mSharedPreferences.getString("DATE",mDate);
-    }
-
-    public static int getYear(Context context) {
-        String mDate = getSharedPrefs(context);
+    public static int getYear(String mDate) {
         Date date = null;
         try {
             date = new SimpleDateFormat("yyyy-MM-dd").parse(mDate);
@@ -46,8 +28,7 @@ public class Util {
         return Integer.parseInt(new SimpleDateFormat("yyyy").format(date));
     }
 
-    public static int getMonth(Context context) {
-        String mDate = getSharedPrefs(context);
+    public static int getMonth(String mDate) {
         Date date = null;
         try {
             date = new SimpleDateFormat("yyyy-MM-dd").parse(mDate);
@@ -57,8 +38,7 @@ public class Util {
         return Integer.parseInt(new SimpleDateFormat("MM").format(date));
     }
 
-    public static int getDay(Context context) {
-        String mDate = getSharedPrefs(context);
+    public static int getDay(String mDate) {
         Date date = null;
         try {
             date = new SimpleDateFormat("yyyy-MM-dd").parse(mDate);
@@ -90,5 +70,17 @@ public class Util {
         TextView textView = sbView.findViewById(R.id.snackbar_text);
         textView.setTextColor(color);
         snackbar.show();
+    }
+
+    public static String formatDate(int year, int month, int day) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+        cal.set(Calendar.MONTH, month-1);
+        return new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+    }
+
+    public static String getDefaultDate() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()-24*60*60*1000));
     }
 }
