@@ -1,4 +1,4 @@
-package dz.islem.githubapi.adapters;
+package dz.islem.githubapi.ui.home;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -19,14 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dz.islem.githubapi.R;
-import dz.islem.githubapi.interfaces.IRecyclerView;
-import dz.islem.githubapi.models.ItemModel;
+import dz.islem.githubapi.data.model.ItemModel;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     private static List<ItemModel> mData = new ArrayList<>();
 
-    public RecyclerAdapter(){}
+    public MainAdapter(){}
 
     @NonNull
     @Override
@@ -55,7 +54,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return (mData == null ? 0 : mData.size());
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements IRecyclerView {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView mTitle;
         private final TextView mDescription;
         private final TextView mStar;
@@ -66,12 +65,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public ViewHolder(@NonNull final View mView) {
             super(mView);
 
-            mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    RecyclerAdapter.copyToClip(view.getContext(),getAdapterPosition());
-                }
-            });
+            mView.setOnClickListener(view -> MainAdapter.copyToClip(view.getContext(),getAdapterPosition()));
 
             mTitle = mView.findViewById(R.id.title);
             mDescription = mView.findViewById(R.id.description);
@@ -81,32 +75,26 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             mLicenseView = mView.findViewById(R.id.licenseView);
         }
 
-        @Override
         public void setTitle(String title) {
             mTitle.setText(title);
         }
 
-        @Override
         public void setDescription(String description) {
             mDescription.setText(description);
         }
 
-        @Override
         public void setStarCount(String count) {
             mStar.setText(count);
         }
 
-        @Override
         public void setLanguage(String language) {
             mLang.setText(language);
         }
 
-        @Override
         public void setAvatar(String avatar) {
             Picasso.get().load(avatar).into(mAvatatImg);
         }
 
-        @Override
         public void setLicense(String license) {
             mLicenseView.setText(license);
         }
@@ -116,13 +104,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public static void copyToClip(Context context, int position) {
         ClipboardManager clipboard = (ClipboardManager)  context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("Git URL", mData.get(position).getClone_url());
-        clipboard.setPrimaryClip(clip);
+        if (clipboard != null) {
+            clipboard.setPrimaryClip(clip);
+        }
 
         Toast.makeText(context,"Link Copied to the Clipboard",Toast.LENGTH_SHORT).show();
     }
 
-    public void setData(List<ItemModel> mData) {
-        this.mData = mData;
+    public void clearData() {
+        mData = new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
+    public void addData(List<ItemModel> mData){
+        this.mData.addAll(mData);
+        notifyDataSetChanged();
     }
 
 }

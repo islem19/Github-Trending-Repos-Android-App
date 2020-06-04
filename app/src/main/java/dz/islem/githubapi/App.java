@@ -1,27 +1,17 @@
 package dz.islem.githubapi;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.app.Application;
 
-import android.os.Bundle;
-import android.view.View;
-
-import dz.islem.githubapi.fragments.RecyclerViewFragment;
-import dz.islem.githubapi.utils.Util;
-
-public class App extends AppCompatActivity {
+public class App extends Application {
+    private static App mInstance;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public void onCreate(){
+        super.onCreate();
+        mInstance = this;
+    }
 
-        if (Util.isNetworkAvailable(getApplicationContext()))
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.sample_content_fragment, RecyclerViewFragment.newInstance())
-                    .commit();
-        else {
-            Util.showSnack(findViewById(R.id.sample_main_layout),true,"No Internet Connection! ");
-            findViewById(R.id.imgview).setVisibility(View.VISIBLE);
-        }
+    public static App getInstance() {
+        return mInstance;
     }
 }

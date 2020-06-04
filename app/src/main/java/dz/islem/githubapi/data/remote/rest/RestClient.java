@@ -1,4 +1,4 @@
-package dz.islem.githubapi.remote.rest;
+package dz.islem.githubapi.data.remote.rest;
 
 import dz.islem.githubapi.utils.Constants;
 import retrofit2.Retrofit;

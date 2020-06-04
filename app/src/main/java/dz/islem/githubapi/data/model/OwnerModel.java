@@ -1,4 +1,4 @@
-package dz.islem.githubapi.models;
+package dz.islem.githubapi.data.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
